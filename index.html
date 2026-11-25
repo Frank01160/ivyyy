@@ -1,1509 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a0208">
+<meta name="description" content="A velvet world made for Ivy — from Frank.">
+<title>Frank × Ivy — A Velvet World</title>
 
-    <!-- Mobile responsiveness -->
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
 
-    <meta name="theme-color" content="#09070a">
-
-    <meta name="description"
-          content="A little world made for Ivy — from Frank.">
-
-    <title>Frank × Ivy — Our Little World</title>
-
-    <!-- =========================================================
-         GOOGLE FONTS
-         We will style these properly in style.css later.
-         ========================================================= -->
-
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
-
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&family=Great+Vibes&display=swap"
-          rel="stylesheet">
-
-
-    <!-- =========================================================
-         MAIN CSS
-         ========================================================= -->
-
-    <link rel="stylesheet"
-          href="css/style.css">
-
+<link rel="stylesheet" href="css/style.css">
 </head>
 
-
-<body>
-
-
-<!-- =============================================================
-     GLOBAL EXPERIENCE
-     ============================================================= -->
-
-<div id="experience">
-
-
-    <!-- =========================================================
-         BACKGROUND ATMOSPHERE
-         JavaScript will control these later.
-         ========================================================= -->
-
-    <div id="sky-background">
-
-        <!-- Stars -->
-        <div id="stars"></div>
-
-        <!-- Moving clouds -->
-        <div id="cloud-layer"></div>
-
-        <!-- Sun -->
-        <div id="sun"></div>
-
-        <!-- Moon -->
-        <div id="moon"></div>
-
-        <!-- Interactive glowing particles -->
-        <div id="particle-field"></div>
-
-        <!-- Soft bokeh lights -->
-        <div id="bokeh-field"></div>
-
-    </div>
-
-
-    <!-- =========================================================
-         MUSIC
-         ========================================================= -->
-
-    <audio id="our-song"
-           preload="auto"
-           loop>
-
-        <!--
-            =====================================================
-            MUSIC FILE
-
-            Replace this with your song:
-
-            audio/our-song.mp3
-            =====================================================
-        -->
-
-        <source src="audio/our-song.mp3"
-                type="audio/mpeg">
-
-    </audio>
-
-
-    <!-- Floating music button -->
-
-    <button id="music-toggle"
-            class="music-control"
-            aria-label="Play our song">
-
-        <span class="music-icon">♪</span>
-
-        <span class="music-label">
-            Our song
-        </span>
-
-    </button>
-
-
-
-    <!-- =========================================================
-         NAVIGATION
-         ========================================================= -->
-
-    <nav id="main-navigation">
-
-        <a href="#home">IVY × FRANK</a>
-
-        <div class="nav-links">
-
-            <a href="#story">Our Story</a>
-
-            <a href="#gravity">Gravity</a>
-
-            <a href="#gallery">Us</a>
-
-            <a href="#ending">♥</a>
-
-        </div>
-
-    </nav>
-
-
-
-    <!-- =========================================================
-         01 — OPENING
-         ========================================================= -->
-
-    <main>
-
-
-    <section id="home"
-             class="hero-section">
-
-
-        <!-- Small date -->
-
-        <p class="hero-date">
-            JULY 14, 2026
-        </p>
-
-
-        <!-- Main title -->
-
-        <h1 class="hero-title">
-
-            <span class="hero-name">
-                IVY
-            </span>
-
-            <span class="hero-symbol">
-                ×
-            </span>
-
-            <span class="hero-name">
-                FRANK
-            </span>
-
-        </h1>
-
-
-        <p class="hero-subtitle">
-            Our little world.
-        </p>
-
-
-        <!-- Decorative moon -->
-
-        <div class="hero-moon"
-             aria-hidden="true">
-
-            <div class="moon-glow"></div>
-
-        </div>
-
-
-        <!-- Intro text -->
-
-        <div class="hero-introduction">
-
-            <p>
-                Before there were memories...
-            </p>
-
-            <p>
-                Before there were inside jokes...
-            </p>
-
-            <p class="hero-emphasis">
-                There was just a “Hi.”
-            </p>
-
-        </div>
-
-
-        <!-- Entry button -->
-
-        <button id="enter-world"
-                class="primary-button">
-
-            <span>Enter our world</span>
-
-            <span class="button-heart">♥</span>
-
-        </button>
-
-
-        <p class="headphones-note">
-            🎧 Headphones recommended
-        </p>
-
-
-        <!-- Scroll indicator -->
-
-        <div class="scroll-indicator">
-
-            <span>
-                Scroll to begin
-            </span>
-
-            <span class="scroll-arrow">
-                ↓
-            </span>
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =========================================================
-         02 — FIRST HELLO
-         ========================================================= -->
-
-    <section id="story"
-             class="story-section">
-
-
-        <div class="section-intro">
-
-            <span class="chapter-number">
-                CHAPTER 01
-            </span>
-
-            <h2>
-                The First Hello
-            </h2>
-
-            <p>
-                July 14, 2026.
-            </p>
-
-        </div>
-
-
-
-        <!-- Moon quote -->
-
-        <div class="moon-story">
-
-            <div class="moon-story-visual">
-
-                <div class="story-moon"></div>
-
-            </div>
-
-
-            <div class="moon-story-text">
-
-                <span class="small-label">
-                    5:06 PM
-                </span>
-
-                <p class="story-quote">
-                    “There's a rule I heard here...
-                    that the first contact you see
-                    with a moon gets to be your light
-                    in the dark.”
-                </p>
-
-                <span class="story-signature">
-                    — Frank
-                </span>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- =====================================================
-             INTERACTIVE CHAT
-             ===================================================== -->
-
-        <div class="chat-story">
-
-            <div class="chat-heading">
-
-                <span>
-                    THE CONVERSATION
-                </span>
-
-                <p>
-                    It started simply.
-                </p>
-
-            </div>
-
-
-            <div class="chat-window">
-
-
-                <!-- CHAT MESSAGE 01 -->
-
-                <div class="chat-message sent">
-
-                    <div class="chat-name">
-                        Frank
-                    </div>
-
-                    <div class="chat-bubble">
-                        Hi
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 02 -->
-
-                <div class="chat-message received">
-
-                    <div class="chat-name">
-                        Ivy
-                    </div>
-
-                    <div class="chat-bubble">
-                        Hi
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 03 -->
-
-                <div class="chat-message sent">
-
-                    <div class="chat-name">
-                        Frank
-                    </div>
-
-                    <div class="chat-bubble">
-                        Apparently you and I have
-                        been paired here in the campus...
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 04 -->
-
-                <div class="chat-message received">
-
-                    <div class="chat-name">
-                        Ivy
-                    </div>
-
-                    <div class="chat-bubble">
-                        like aje 😂
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 05 -->
-
-                <div class="chat-message sent">
-
-                    <div class="chat-name">
-                        Frank
-                    </div>
-
-                    <div class="chat-bubble">
-                        I'm Frank and was hoping
-                        to make a frnd
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 06 -->
-
-                <div class="chat-message received">
-
-                    <div class="chat-name">
-                        Ivy
-                    </div>
-
-                    <div class="chat-bubble">
-                        naitwa Ivy
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 07 -->
-
-                <div class="chat-message sent">
-
-                    <div class="chat-name">
-                        Frank
-                    </div>
-
-                    <div class="chat-bubble">
-                        First frnd to have called Ivy,
-                        it's a unique name.
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 08 -->
-
-                <div class="chat-message received">
-
-                    <div class="chat-name">
-                        Ivy
-                    </div>
-
-                    <div class="chat-bubble">
-                        pia ww, your name is unique 😌
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 09 -->
-
-                <div class="chat-message sent">
-
-                    <div class="chat-name">
-                        Frank
-                    </div>
-
-                    <div class="chat-bubble">
-                        😜, not as much as urs.
-                        Even the pope was called Francis
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 10 -->
-
-                <div class="chat-message received">
-
-                    <div class="chat-name">
-                        Ivy
-                    </div>
-
-                    <div class="chat-bubble">
-                        yangu sasa ni worst 😂
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 11 -->
-
-                <div class="chat-message sent">
-
-                    <div class="chat-name">
-                        Frank
-                    </div>
-
-                    <div class="chat-bubble">
-                        Oh yeah... btw there's this
-                        character called poison ivy 😏
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 12 -->
-
-                <div class="chat-message received">
-
-                    <div class="chat-name">
-                        Ivy
-                    </div>
-
-                    <div class="chat-bubble">
-                        haya 😂😂😂
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 13 -->
-
-                <div class="chat-message sent">
-
-                    <div class="chat-name">
-                        Frank
-                    </div>
-
-                    <div class="chat-bubble">
-                        I'm doing civil engineering,
-                        lemmi try to guess yours.
-                    </div>
-
-                </div>
-
-
-
-                <!-- CHAT MESSAGE 14 -->
-
-                <div class="chat-message received">
-
-                    <div class="chat-name">
-                        Ivy
-                    </div>
-
-                    <div class="chat-bubble">
-                        okay guess 😌
-                    </div>
-
-                </div>
-
-
-            </div>
-
-
-            <!-- Actual screenshot -->
-
-            <div class="real-chat-memory">
-
-                <span class="small-label">
-                    THE ACTUAL EVIDENCE
-                </span>
-
-                <!-- =================================================
-                     CHAT SCREENSHOT 01
-                     REPLACE THIS IMAGE LATER
-                     ================================================= -->
-
-                <img src="images/chat-01.jpg"
-                     alt="Frank and Ivy first conversation"
-                     class="chat-screenshot">
-
-            </div>
-
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =========================================================
-         03 — THE JOURNEY
-         ========================================================= -->
-
-    <section id="journey"
-             class="journey-section">
-
-
-        <div class="journey-road">
-
-            <!-- The sun will move along this environment -->
-
-            <div class="journey-sun"></div>
-
-            <div class="journey-clouds"></div>
-
-
-            <div class="road-content">
-
-                <span class="chapter-number">
-                    CHAPTER 02
-                </span>
-
-                <h2>
-                    And then...
-                </h2>
-
-                <p>
-                    one conversation became another.
-                </p>
-
-
-                <!-- Road signs -->
-
-                <div class="road-signs">
-
-
-                    <button class="road-sign"
-                            data-memory="moon">
-
-                        <span>
-                            01
-                        </span>
-
-                        <strong>
-                            THE MOON
-                        </strong>
-
-                    </button>
-
-
-                    <button class="road-sign"
-                            data-memory="ivy">
-
-                        <span>
-                            02
-                        </span>
-
-                        <strong>
-                            POISON IVY
-                        </strong>
-
-                    </button>
-
-
-                    <button class="road-sign"
-                            data-memory="engineering">
-
-                        <span>
-                            03
-                        </span>
-
-                        <strong>
-                            ENGINEERING
-                        </strong>
-
-                    </button>
-
-
-                    <button class="road-sign"
-                            data-memory="kababa">
-
-                        <span>
-                            04
-                        </span>
-
-                        <strong>
-                            KABABA 😂
-                        </strong>
-
-                    </button>
-
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =========================================================
-         04 — GRAVITY
-         ========================================================= -->
-
-    <section id="gravity"
-             class="gravity-section">
-
-
-        <div id="gravity-world">
-
-
-            <!-- Objects controlled by phone tilt / mouse -->
-
-            <div class="gravity-object gravity-star">
-                ✦
-            </div>
-
-            <div class="gravity-object gravity-heart">
-                ♥
-            </div>
-
-            <div class="gravity-object gravity-leaf">
-                🌿
-            </div>
-
-            <div class="gravity-object gravity-moon">
-                ☾
-            </div>
-
-            <div class="gravity-object gravity-letter">
-                I
-            </div>
-
-            <div class="gravity-object gravity-letter">
-                V
-            </div>
-
-            <div class="gravity-object gravity-letter">
-                Y
-            </div>
-
-            <div class="gravity-object gravity-letter">
-                ♥
-            </div>
-
-
-            <!-- Gravity title -->
-
-            <div class="gravity-center">
-
-                <span class="chapter-number">
-                    A LITTLE EXPERIMENT
-                </span>
-
-                <h2>
-                    GRAVITY
-                </h2>
-
-                <p>
-                    Apparently even our little world
-                    has physics.
-                </p>
-
-                <span class="gravity-instruction desktop-instruction">
-                    Move your mouse
-                </span>
-
-                <span class="gravity-instruction mobile-instruction">
-                    Tilt your phone
-                </span>
-
-            </div>
-
-
-        </div>
-
-
-        <button id="gravity-reset"
-                class="secondary-button">
-
-            Reset gravity
-
-        </button>
-
-
-    </section>
-
-
-
-    <!-- =========================================================
-         05 — THINGS I LIKE ABOUT IVY
-         ========================================================= -->
-
-    <section id="flirt"
-             class="flirt-section">
-
-
-        <div class="section-intro">
-
-            <span class="chapter-number">
-                CHAPTER 03
-            </span>
-
-            <h2>
-                Things I Like About You
-            </h2>
-
-            <p>
-                I was going to keep this section innocent...
-            </p>
-
-        </div>
-
-
-
-        <div class="flirt-cards">
-
-
-            <!-- FLIRT CARD 01 -->
-
-            <article class="flirt-card">
-
-                <span class="flirt-number">
-                    01
-                </span>
-
-                <h3>
-                    Your smile
-                </h3>
-
-                <p>
-                    Honestly distracting.
-                </p>
-
-            </article>
-
-
-
-            <!-- FLIRT CARD 02 -->
-
-            <article class="flirt-card">
-
-                <span class="flirt-number">
-                    02
-                </span>
-
-                <h3>
-                    Your eyes
-                </h3>
-
-                <p>
-                    A little unfair, Ivy.
-                </p>
-
-            </article>
-
-
-
-            <!-- FLIRT CARD 03 -->
-
-            <article class="flirt-card">
-
-                <span class="flirt-number">
-                    03
-                </span>
-
-                <h3>
-                    Your attitude
-                </h3>
-
-                <p>
-                    Annoying. Attractive.
-                    Somehow both.
-                </p>
-
-            </article>
-
-
-
-            <!-- FLIRT CARD 04 -->
-
-            <article class="flirt-card">
-
-                <span class="flirt-number">
-                    04
-                </span>
-
-                <h3>
-                    That face
-                </h3>
-
-                <p>
-                    We need to discuss
-                    why you're allowed to
-                    look that good.
-                </p>
-
-            </article>
-
-
-
-            <!-- SECRET FLIRT CARD -->
-
-            <article class="flirt-card secret-flirt-card">
-
-                <span class="flirt-number">
-                    05
-                </span>
-
-                <h3>
-                    And then there's...
-                </h3>
-
-                <button class="secret-button"
-                        data-secret="flirt">
-
-                    I'm curious 👀
-
-                </button>
-
-            </article>
-
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =========================================================
-         06 — THE GALLERY
-         ========================================================= -->
-
-    <section id="gallery"
-             class="gallery-section">
-
-
-        <div class="section-intro gallery-intro">
-
-            <span class="chapter-number">
-                CHAPTER 04
-            </span>
-
-            <h2>
-                Us
-            </h2>
-
-            <p>
-                Two people. A few memories.
-                Plenty of space for what's still to come.
-            </p>
-
-        </div>
-
-
-
-        <div class="gallery-wall">
-
-
-            <!-- =================================================
-                 PHOTO 01 — IVY
-                 REPLACE:
-                 images/gallery-ivy.jpg
-                 ================================================= -->
-
-            <article class="memory-card memory-card-ivy">
-
-                <div class="photo-frame">
-
-                    <img src="images/gallery-ivy.jpg"
-                         alt="Ivy"
-                         class="gallery-image">
-
-                </div>
-
-
-                <div class="memory-caption">
-
-                    <span class="memory-number">
-                        MEMORY 01
-                    </span>
-
-                    <h3>
-                        Ivy
-                    </h3>
-
-                    <p>
-                        The pretty one. 😏
-                    </p>
-
-                </div>
-
-            </article>
-
-
-
-            <!-- =================================================
-                 PHOTO 02 — FRANK
-                 REPLACE:
-                 images/gallery-frank.jpg
-                 ================================================= -->
-
-            <article class="memory-card memory-card-frank">
-
-                <div class="photo-frame">
-
-                    <img src="images/gallery-frank.jpg"
-                         alt="Frank"
-                         class="gallery-image">
-
-                </div>
-
-
-                <div class="memory-caption">
-
-                    <span class="memory-number">
-                        MEMORY 02
-                    </span>
-
-                    <h3>
-                        Frank
-                    </h3>
-
-                    <p>
-                        The one responsible. 😂
-                    </p>
-
-                </div>
-
-            </article>
-
-
-
-            <!-- =================================================
-                 EMPTY / FUTURE MEMORY CARD
-                 NO IMAGE YET
-                 ================================================= -->
-
-            <article class="memory-card next-memory-card">
-
-
-                <div class="future-memory-content">
-
-
-                    <div class="future-memory-icon">
-                        +
-                    </div>
-
-
-                    <span class="memory-number">
-                        MEMORY 03
-                    </span>
-
-
-                    <h3>
-                        Our next memory
-                    </h3>
-
-
-                    <p>
-                        This space is waiting for us.
-                    </p>
-
-
-                    <button id="create-memory"
-                            class="memory-button">
-
-                        Let's create another memory
-                        <span>♥</span>
-
-                    </button>
-
-
-                </div>
-
-
-            </article>
-
-
-        </div>
-
-
-
-        <!-- Gallery footer -->
-
-        <div class="gallery-footer">
-
-            <span>
-                Memories captured:
-            </span>
-
-            <strong id="memory-count">
-                2
-            </strong>
-
-            <span>
-                / ∞
-            </span>
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =========================================================
-         07 — OPEN WHEN
-         ========================================================= -->
-
-    <section id="open-when"
-             class="open-when-section">
-
-
-        <div class="section-intro">
-
-            <span class="chapter-number">
-                JUST BETWEEN US
-            </span>
-
-            <h2>
-                Open When...
-            </h2>
-
-            <p>
-                A few little things for different versions of you.
-            </p>
-
-        </div>
-
-
-
-        <div class="envelope-container">
-
-
-            <!-- ENVELOPE 01 -->
-
-            <button class="envelope"
-                    data-letter="miss-me">
-
-                <span class="envelope-icon">
-                    💌
-                </span>
-
-                <span>
-                    You miss me
-                </span>
-
-            </button>
-
-
-
-            <!-- ENVELOPE 02 -->
-
-            <button class="envelope"
-                    data-letter="bad-day">
-
-                <span class="envelope-icon">
-                    🌧️
-                </span>
-
-                <span>
-                    You're having a bad day
-                </span>
-
-            </button>
-
-
-
-            <!-- ENVELOPE 03 -->
-
-            <button class="envelope"
-                    data-letter="thinking">
-
-                <span class="envelope-icon">
-                    👀
-                </span>
-
-                <span>
-                    You're thinking about me
-                </span>
-
-            </button>
-
-
-
-            <!-- ENVELOPE 04 -->
-
-            <button class="envelope"
-                    data-letter="attention">
-
-                <span class="envelope-icon">
-                    😏
-                </span>
-
-                <span>
-                    You want attention
-                </span>
-
-            </button>
-
-
-        </div>
-
-
-        <!-- Letter modal -->
-
-        <div id="letter-modal"
-             class="modal"
-             aria-hidden="true">
-
-
-            <div class="modal-content">
-
-                <button class="modal-close"
-                        aria-label="Close">
-                    ×
-                </button>
-
-
-                <div class="letter-paper">
-
-                    <span class="letter-small-title">
-                        FOR IVY
-                    </span>
-
-                    <h3 id="letter-title">
-                        Open when...
-                    </h3>
-
-                    <p id="letter-text">
-                        Your message will appear here.
-                    </p>
-
-                    <span class="letter-signature">
-                        — Frank ♥
-                    </span>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =========================================================
-         08 — SECRET / PRIVATE
-         ========================================================= -->
-
-    <section id="secret"
-             class="secret-section">
-
-
-        <div class="secret-container">
-
-
-            <span class="chapter-number">
-                PRIVATE
-            </span>
-
-
-            <h2>
-                Don't open this.
-            </h2>
-
-
-            <p>
-                Seriously, Ivy.
-            </p>
-
-
-            <button id="secret-open"
-                    class="secret-open-button">
-
-                Open anyway 👀
-
-            </button>
-
-
-            <div id="secret-message"
-                 class="hidden-secret">
-
-
-                <p class="secret-line">
-                    I was going to behave myself
-                    on this website...
-                </p>
-
-
-                <p class="secret-line">
-                    Then I remembered who I'm
-                    making it for.
-                </p>
-
-
-                <p class="secret-emphasis">
-                    😏
-                </p>
-
-
-                <p class="secret-line">
-                    You're becoming a problem, Ivy.
-                </p>
-
-
-                <p class="secret-final">
-                    A very pretty problem.
-                </p>
-
-
-            </div>
-
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =========================================================
-         09 — FINAL SUNSET
-         ========================================================= -->
-
-    <section id="ending"
-             class="ending-section">
-
-
-        <div class="sunset-environment">
-
-            <div class="ending-sun"></div>
-
-            <div class="ending-clouds"></div>
-
-            <div class="ending-road"></div>
-
-        </div>
-
-
-        <div class="ending-content">
-
-
-            <span class="chapter-number">
-                ONE LAST THING
-            </span>
-
-
-            <h2>
-                Ivy.
-            </h2>
-
-
-            <div class="final-letter">
-
-
-                <p>
-                    If someone had told me that a random
-                    “Hi” on July 14 would lead to all these
-                    memories...
-                </p>
-
-
-                <p>
-                    I probably wouldn't have believed them.
-                </p>
-
-
-                <p>
-                    But I'm glad it happened.
-                </p>
-
-
-                <p class="final-emphasis">
-                    And honestly...
-                </p>
-
-
-                <p>
-                    I'm hoping we're nowhere near the end
-                    of this story.
-                </p>
-
-
-            </div>
-
-
-            <div class="final-signature">
-
-                <span>
-                    Frank
-                </span>
-
-                <strong>
-                    ♥
-                </strong>
-
-                <span>
-                    Ivy
-                </span>
-
-            </div>
-
-
-            <p class="chapter-ending">
-                Chapter One.
-            </p>
-
-
-            <button id="replay-story"
-                    class="primary-button">
-
-                Replay our story ↻
-
-            </button>
-
-
-        </div>
-
-
-    </section>
-
-
-    </main>
-
-
-
-    <!-- =========================================================
-         GLOBAL MODALS / INTERACTIVE ELEMENTS
-         ========================================================= -->
-
-
-    <!-- Secret memory modal -->
-
-    <div id="memory-modal"
-         class="modal"
-         aria-hidden="true">
-
-        <div class="modal-content">
-
-            <button class="modal-close"
-                    aria-label="Close">
-                ×
-            </button>
-
-            <div id="memory-modal-content">
-
-                <!-- JavaScript inserts memory here -->
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- =========================================================
-         FOOTER
-         ========================================================= -->
-
-    <footer id="site-footer">
-
-        <p>
-            Made with questionable amounts of affection.
-        </p>
-
-        <p>
-            © Frank × Ivy
-        </p>
-
-    </footer>
-
-
-
+<body class="page-home">
+
+<!-- ============================================================
+     BACKGROUND: velvet red ocean of love emojis
+     ============================================================ -->
+<div id="velvet-bg" aria-hidden="true">
+  <div class="velvet-gradient"></div>
+  <div class="velvet-noise"></div>
+  <div id="love-petal-field"></div>
+  <div id="bokeh-field"></div>
 </div>
-<!-- END EXPERIENCE -->
 
+<!-- Cursor aura (desktop only, follows pointer) -->
+<div id="cursor-aura" aria-hidden="true"></div>
 
+<!-- Music -->
+<audio id="our-song" preload="auto" loop>
+  <source src="audio/our-song.mp3" type="audio/mpeg">
+</audio>
+<button id="music-toggle" class="music-control" aria-label="Play our song" aria-pressed="false">
+  <span class="music-icon">♪</span>
+  <span class="music-label">Our song</span>
+</button>
 
-<!-- =============================================================
-     JAVASCRIPT
-     =============================================================
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<nav id="main-nav">
+  <a href="index.html" class="nav-brand">IVY <span>×</span> FRANK</a>
+  <div class="nav-links">
+    <a href="#story">Story</a>
+    <a href="#things">Things</a>
+    <a href="#gallery">Us</a>
+    <a href="magic.html" class="nav-magic">Magic ✦</a>
+  </div>
+</nav>
 
-     IMPORTANT:
-     We are NOT putting JavaScript in this HTML.
+<main>
 
-     All behaviour will live inside /js/
+<!-- ============================================================
+     01 — HERO
+     ============================================================ -->
+<section id="home" class="hero-section">
+  <p class="hero-date">JULY 14, 2026</p>
 
-     ============================================================= -->
+  <h1 class="hero-title">
+    <span class="hero-name">IVY</span>
+    <span class="hero-symbol">×</span>
+    <span class="hero-name">FRANK</span>
+  </h1>
 
-<script src="js/main.js"></script>
+  <p class="hero-subtitle">A velvet little world, made just for you.</p>
 
-<script src="js/music.js"></script>
+  <div class="hero-moon" aria-hidden="true"><div class="moon-glow"></div></div>
 
-<script src="js/particles.js"></script>
+  <div class="hero-intro">
+    <p>Before there were memories...</p>
+    <p>Before there were inside jokes...</p>
+    <p class="hero-emphasis">There was just a "Hi."</p>
+  </div>
 
-<script src="js/story.js"></script>
+  <div class="hero-actions">
+    <button id="enter-world" class="primary-button">
+      <span>Enter our world</span>
+      <span class="btn-heart">♥</span>
+    </button>
+    <a href="magic.html" class="secondary-link">or skip to the magic →</a>
+  </div>
 
-<script src="js/gravity.js"></script>
+  <p class="headphones-note">🎧 Headphones recommended</p>
+</section>
 
-<script src="js/gallery.js"></script>
+<!-- ============================================================
+     02 — FIRST HELLO (chat)
+     ============================================================ -->
+<section id="story" class="story-section">
+  <div class="section-intro reveal">
+    <span class="chapter-number">CHAPTER 01</span>
+    <h2>The First Hello</h2>
+    <p>July 14, 2026.</p>
+  </div>
 
+  <div class="moon-quote reveal">
+    <div class="moon-visual"><div class="story-moon"></div></div>
+    <div class="moon-text">
+      <span class="small-label">5:06 PM</span>
+      <p class="story-quote">
+        "There's a rule I heard here... that the first contact you see with a moon
+        gets to be your light in the dark."
+      </p>
+      <span class="story-signature">— Frank</span>
+    </div>
+  </div>
+
+  <div class="chat-story reveal">
+    <div class="chat-heading">
+      <span class="small-label">THE CONVERSATION</span>
+      <p>It started simply.</p>
+    </div>
+
+    <div class="chat-window" id="chat-window">
+      <!-- messages are injected by JS for a staggered type-in feel;
+           fallback markup keeps it readable even with JS disabled -->
+      <noscript>
+        <div class="chat-message sent"><div class="chat-name">Frank</div><div class="chat-bubble">Hi</div></div>
+        <div class="chat-message received"><div class="chat-name">Ivy</div><div class="chat-bubble">Hi</div></div>
+      </noscript>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     03 — THINGS I LIKE ABOUT YOU
+     ============================================================ -->
+<section id="things" class="things-section">
+  <div class="section-intro reveal">
+    <span class="chapter-number">CHAPTER 02</span>
+    <h2>Things I Like About You</h2>
+    <p>I was going to keep this section innocent...</p>
+  </div>
+
+  <div class="things-grid">
+    <article class="thing-card reveal">
+      <span class="thing-num">01</span>
+      <h3>Your smile</h3>
+      <p>Honestly distracting.</p>
+    </article>
+
+    <article class="thing-card reveal">
+      <span class="thing-num">02</span>
+      <h3>Your eyes</h3>
+      <p>A little unfair, Ivy.</p>
+    </article>
+
+    <article class="thing-card reveal">
+      <span class="thing-num">03</span>
+      <h3>Your attitude</h3>
+      <p>Annoying. Attractive. Somehow both.</p>
+    </article>
+
+    <article class="thing-card reveal">
+      <span class="thing-num">04</span>
+      <h3>That face</h3>
+      <p>We need to discuss why you're allowed to look that good.</p>
+    </article>
+
+    <article class="thing-card thing-secret reveal">
+      <span class="thing-num">05</span>
+      <h3>And then there's...</h3>
+      <button class="secret-button" data-secret="thing">I'm curious 👀</button>
+    </article>
+  </div>
+</section>
+
+<!-- ============================================================
+     04 — GALLERY
+     ============================================================ -->
+<section id="gallery" class="gallery-section">
+  <div class="section-intro reveal">
+    <span class="chapter-number">CHAPTER 03</span>
+    <h2>Us</h2>
+    <p>Two people. A few memories. Plenty of room for more.</p>
+  </div>
+
+  <div class="gallery-grid">
+
+    <article class="memory-card reveal">
+      <div class="photo-frame">
+        <!-- REPLACE src later with images/gallery-ivy.jpg -->
+        <img
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='1000'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23a0264b'/><stop offset='1' stop-color='%23400d1f'/></linearGradient></defs><rect width='800' height='1000' fill='url(%23g)'/><text x='50%' y='50%' font-family='Georgia' font-size='160' fill='%23ffd9e2' text-anchor='middle' dominant-baseline='middle'>I</text></svg>"
+          alt="Ivy" class="gallery-image">
+      </div>
+      <div class="memory-caption">
+        <span class="memory-num">MEMORY 01</span>
+        <h3>Ivy</h3>
+        <p>The pretty one. 😏</p>
+      </div>
+    </article>
+
+    <article class="memory-card reveal">
+      <div class="photo-frame">
+        <img
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='1000'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%237a1740'/><stop offset='1' stop-color='%23280a15'/></linearGradient></defs><rect width='800' height='1000' fill='url(%23g)'/><text x='50%' y='50%' font-family='Georgia' font-size='160' fill='%23ffd9e2' text-anchor='middle' dominant-baseline='middle'>F</text></svg>"
+          alt="Frank" class="gallery-image">
+      </div>
+      <div class="memory-caption">
+        <span class="memory-num">MEMORY 02</span>
+        <h3>Frank</h3>
+        <p>The one responsible. 😂</p>
+      </div>
+    </article>
+
+    <article class="memory-card memory-future reveal">
+      <div class="future-content">
+        <div class="future-icon">+</div>
+        <span class="memory-num">MEMORY 03</span>
+        <h3>Our next memory</h3>
+        <p>This space is waiting for us.</p>
+        <a href="magic.html" class="memory-button">
+          Let's create one <span>♥</span>
+        </a>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="gallery-footer">
+    <span>Memories captured:</span>
+    <strong id="memory-count">2</strong>
+    <span>/ ∞</span>
+  </div>
+</section>
+
+<!-- ============================================================
+     05 — SECRET MESSAGE
+     ============================================================ -->
+<section id="secret" class="secret-section">
+  <div class="secret-container reveal">
+    <span class="chapter-number">PRIVATE</span>
+    <h2>Don't open this.</h2>
+    <p>Seriously, Ivy.</p>
+    <button id="secret-open" class="primary-button">Open anyway 👀</button>
+
+    <div id="secret-message" class="hidden-secret">
+      <p class="secret-line">I was going to behave myself on this website...</p>
+      <p class="secret-line">Then I remembered who I'm making it for.</p>
+      <p class="secret-emphasis">😏</p>
+      <p class="secret-line">You're becoming a problem, Ivy.</p>
+      <p class="secret-final">A very pretty problem.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     06 — FINAL
+     ============================================================ -->
+<section id="ending" class="ending-section">
+  <div class="ending-content reveal">
+    <span class="chapter-number">ONE LAST THING</span>
+    <h2>Ivy.</h2>
+
+    <div class="final-letter">
+      <p>If someone had told me that a random "Hi" on July 14 would lead to all these memories...</p>
+      <p>I probably wouldn't have believed them.</p>
+      <p>But I'm glad it happened.</p>
+      <p class="final-emphasis">And honestly...</p>
+      <p>I'm hoping we're nowhere near the end of this story.</p>
+    </div>
+
+    <div class="final-signature">
+      <span>Frank</span><strong>♥</strong><span>Ivy</span>
+    </div>
+
+    <p class="chapter-ending">Chapter One.</p>
+
+    <div class="ending-actions">
+      <a href="magic.html" class="primary-button">
+        <span>One more thing</span>
+        <span class="btn-heart">✦</span>
+      </a>
+      <button id="replay-story" class="ghost-button">Replay ↻</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="site-footer">
+  <p>Made with questionable amounts of affection.</p>
+  <p>© Frank × Ivy</p>
+</footer>
+
+<!-- ============================================================
+     MODALS
+     ============================================================ -->
+<div id="memory-modal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <button class="modal-close" aria-label="Close">×</button>
+    <div id="memory-modal-body"></div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/home.js"></script>
 </body>
-
 </html>
