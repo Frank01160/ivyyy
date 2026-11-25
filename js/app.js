@@ -1,15 +1,149 @@
 /* ==========================================================================
-   APP.JS — shared behaviour for index.html + magic.html
+   APP.JS — Frank × Ivy shared behaviour
+   Includes the 3D cube tilt for both desktop (mouse) and phones (tap/drag
+   + device orientation). Auto-detects what's available and does the right
+   thing. Anything not supported silently degrades.
    ========================================================================== */
 
-/* ---------- Music toggle (persists across pages) ---------- */
+/* ---------- 3D CUBE TILT ---------- */
+(function initCubeTilt() {
+  const cube = document.querySelector(".site-cube");
+  if (!cube) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) return;
+
+  const MAX_TILT  = 6;    // degrees
+  const MAX_SHIFT = 12;   // px
+  const SMOOTH    = 0.12;
+
+  let targetX = 0, targetY = 0, targetMx = 0, targetMy = 0;
+  let curX = 0, curY = 0, curMx = 0, curMy = 0;
+  let rafId = null;
+
+  function tick() {
+    curX  += (targetX  - curX)  * SMOOTH;
+    curY  += (targetY  - curY)  * SMOOTH;
+    curMx += (targetMx - curMx) * SMOOTH;
+    curMy += (targetMy - curMy) * SMOOTH;
+
+    cube.style.setProperty("--rx", curX.toFixed(3));
+    cube.style.setProperty("--ry", curY.toFixed(3));
+    cube.style.setProperty("--mx", curMx.toFixed(2));
+    cube.style.setProperty("--my", curMy.toFixed(2));
+
+    const settled =
+      Math.abs(targetX  - curX)  < 0.01 &&
+      Math.abs(targetY  - curY)  < 0.01 &&
+      Math.abs(targetMx - curMx) < 0.05 &&
+      Math.abs(targetMy - curMy) < 0.05;
+
+    rafId = settled ? null : requestAnimationFrame(tick);
+  }
+
+  function kick() {
+    if (rafId === null) rafId = requestAnimationFrame(tick);
+  }
+
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  /* ---------- Desktop: mouse move ---------- */
+  if (canHover) {
+    window.addEventListener("mousemove", (e) => {
+      const nx = (e.clientX / window.innerWidth)  * 2 - 1;
+      const ny = (e.clientY / window.innerHeight) * 2 - 1;
+      targetX  =  ny * MAX_TILT;
+      targetY  = -nx * MAX_TILT;
+      targetMx = -nx * MAX_SHIFT;
+      targetMy = -ny * MAX_SHIFT;
+      kick();
+    });
+    window.addEventListener("mouseleave", () => {
+      targetX = targetY = targetMx = targetMy = 0;
+      kick();
+    });
+  }
+
+  /* ---------- Phone: tap + drag to tilt ---------- */
+  let touchActive = false;
+  let startX = 0, startY = 0;
+
+  window.addEventListener("touchstart", (e) => {
+    if (e.touches.length !== 1) return;
+    touchActive = true;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener("touchmove", (e) => {
+    if (!touchActive || e.touches.length !== 1) return;
+    const t = e.touches[0];
+    // Accumulate drag distance into normalised -1…1
+    const dx = (t.clientX - window.innerWidth  / 2) / (window.innerWidth  / 2);
+    const dy = (t.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+
+    // Clamp and ease
+    const nx = Math.max(-1, Math.min(1, dx));
+    const ny = Math.max(-1, Math.min(1, dy));
+
+    targetX  =  ny * MAX_TILT;
+    targetY  = -nx * MAX_TILT;
+    targetMx = -nx * MAX_SHIFT;
+    targetMy = -ny * MAX_SHIFT;
+    kick();
+  }, { passive: true });
+
+  window.addEventListener("touchend", () => {
+    touchActive = false;
+    // Settle gently back to neutral
+    targetX = targetY = targetMx = targetMy = 0;
+    kick();
+  }, { passive: true });
+
+  /* ---------- Phone: device orientation (if available + permitted) ---------- */
+  function onOrientation(e) {
+    if (touchActive) return;                 // drag takes priority
+    if (e.beta == null || e.gamma == null) return;
+
+    // beta: front-to-back tilt (-180…180), gamma: left-to-right (-90…90)
+    const ny = Math.max(-1, Math.min(1, e.beta  / 45));  // ±45° full tilt
+    const nx = Math.max(-1, Math.min(1, e.gamma / 45));
+
+    targetX  =  ny * MAX_TILT;
+    targetY  = -nx * MAX_TILT;
+    targetMx = -nx * MAX_SHIFT;
+    targetMy = -ny * MAX_SHIFT;
+    kick();
+  }
+
+  // Only attach if it's a touch device AND permission is available
+  if (!canHover && "DeviceOrientationEvent" in window) {
+    if (typeof DeviceOrientationEvent.requestPermission === "function") {
+      // iOS 13+ requires user gesture — attach on first tap
+      const askOnce = () => {
+        DeviceOrientationEvent.requestPermission()
+          .then((state) => {
+            if (state === "granted") {
+              window.addEventListener("deviceorientation", onOrientation);
+            }
+          })
+          .catch(() => { /* user denied, ignore */ });
+        window.removeEventListener("touchstart", askOnce);
+      };
+      window.addEventListener("touchstart", askOnce, { once: true });
+    } else {
+      window.addEventListener("deviceorientation", onOrientation);
+    }
+  }
+})();
+
+/* ---------- Music toggle ---------- */
 (function initMusic() {
-  const audio   = document.getElementById("our-song");
-  const toggle  = document.getElementById("music-toggle");
+  const audio  = document.getElementById("our-song");
+  const toggle = document.getElementById("music-toggle");
   if (!audio || !toggle) return;
 
   const KEY = "ivy_frank_music_on";
-  const shouldPlay = sessionStorage.getItem(KEY) === "1";
 
   function setPressed(on) {
     toggle.setAttribute("aria-pressed", on ? "true" : "false");
@@ -25,7 +159,6 @@
         sessionStorage.setItem(KEY, "1");
         setPressed(true);
       } catch (e) {
-        // Browser may block autoplay — user must click again
         console.warn("Audio blocked:", e);
       }
     } else {
@@ -38,18 +171,16 @@
   audio.addEventListener("play",  () => setPressed(true));
   audio.addEventListener("pause", () => setPressed(false));
 
-  if (shouldPlay) {
+  if (sessionStorage.getItem(KEY) === "1") {
     audio.play().then(() => setPressed(true)).catch(() => {});
   }
 })();
 
-/* ---------- Love petal field (velvet "bubbles" = heart emojis) ---------- */
+/* ---------- Love petals ---------- */
 (function initPetals() {
   const field = document.getElementById("love-petal-field");
   if (!field) return;
-
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   const EMOJIS = ["❤️", "💕", "💖", "💗", "💘", "💝", "🌸", "✨", "💞"];
   const isPhone = window.matchMedia("(max-width: 640px)").matches;
@@ -65,7 +196,7 @@
     p.style.left = Math.random() * 100 + "%";
     p.style.animationDuration = (10 + Math.random() * 16).toFixed(2) + "s";
     p.style.animationDelay = (-Math.random() * 20).toFixed(2) + "s";
-    p.style.setProperty("--drift", ((Math.random() * 60 - 30).toFixed(1)) + "px");
+    p.style.setProperty("--drift", (Math.random() * 60 - 30).toFixed(1) + "px");
     p.style.opacity = (0.45 + Math.random() * 0.4).toFixed(2);
     frag.appendChild(p);
   }
@@ -84,9 +215,9 @@
     cx += (tx - cx) * 0.12;
     cy += (ty - cy) * 0.12;
     aura.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
-    if (Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5) {
-      raf = requestAnimationFrame(tick);
-    } else raf = null;
+    raf = (Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5)
+      ? requestAnimationFrame(tick)
+      : null;
   }
 
   window.addEventListener("mousemove", (e) => {
@@ -118,18 +249,18 @@
   els.forEach(el => io.observe(el));
 })();
 
-/* ---------- Thing-card mouse glow (desktop) ---------- */
+/* ---------- Thing-card glow (desktop) ---------- */
 (function initCardGlow() {
   document.querySelectorAll(".thing-card").forEach(card => {
     card.addEventListener("mousemove", (e) => {
       const r = card.getBoundingClientRect();
-      card.style.setProperty("--mx", ((e.clientX - r.left) / r.width * 100).toFixed(1) + "%");
-      card.style.setProperty("--my", ((e.clientY - r.top) / r.height * 100).toFixed(1) + "%");
+      card.style.setProperty("--mx", ((e.clientX - r.left) / r.width  * 100).toFixed(1) + "%");
+      card.style.setProperty("--my", ((e.clientY - r.top)  / r.height * 100).toFixed(1) + "%");
     });
   });
 })();
 
-/* ---------- Smooth-scroll for in-page anchors (respects motion pref) ---------- */
+/* ---------- Smooth in-page anchors ---------- */
 (function initAnchors() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   document.querySelectorAll('a[href^="#"]').forEach(a => {
