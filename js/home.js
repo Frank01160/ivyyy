@@ -2,7 +2,6 @@
    HOME.JS — page-1-only interactions
    ========================================================================== */
 
-/* ---------- Build the chat messages (with staggered reveal) ---------- */
 const CHAT_MESSAGES = [
   { from: "sent",     name: "Frank", text: "Hi" },
   { from: "received", name: "Ivy",   text: "Hi" },
@@ -20,35 +19,35 @@ const CHAT_MESSAGES = [
   { from: "received", name: "Ivy",   text: "okay guess 😌" }
 ];
 
+function escapeHTML(s) {
+  return s.replace(/[&<>"']/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+}
+
 (function buildChat() {
   const win = document.getElementById("chat-window");
   if (!win) return;
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    CHAT_MESSAGES.forEach((m, i) => {
-      const msg = document.createElement("div");
-      msg.className = `chat-message ${m.from}`;
-      msg.innerHTML = `<div class="chat-name">${m.name}</div><div class="chat-bubble">${escapeHTML(m.text)}</div>`;
-      msg.style.opacity = 1;
-      msg.style.transform = "none";
-      win.appendChild(msg);
-    });
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const render = (m) => {
+    const msg = document.createElement("div");
+    msg.className = `chat-message ${m.from}`;
+    msg.innerHTML = `<div class="chat-name">${m.name}</div><div class="chat-bubble">${escapeHTML(m.text)}</div>`;
+    return msg;
+  };
+
+  if (reduce) {
+    CHAT_MESSAGES.forEach(m => win.appendChild(render(m)));
     return;
   }
 
-  // Lazy reveal — each message appears when its section is on screen
   let revealed = false;
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting && !revealed) {
         revealed = true;
         CHAT_MESSAGES.forEach((m, i) => {
-          setTimeout(() => {
-            const msg = document.createElement("div");
-            msg.className = `chat-message ${m.from}`;
-            msg.innerHTML = `<div class="chat-name">${m.name}</div><div class="chat-bubble">${escapeHTML(m.text)}</div>`;
-            msg.style.animationDelay = "0ms";
-            win.appendChild(msg);
-          }, i * 420);
+          setTimeout(() => win.appendChild(render(m)), i * 420);
         });
         io.disconnect();
       }
@@ -58,33 +57,23 @@ const CHAT_MESSAGES = [
   io.observe(win);
 })();
 
-function escapeHTML(s) {
-  return s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-}
-
-/* ---------- Secret reveal ---------- */
 (function initSecret() {
   const btn = document.getElementById("secret-open");
   const msg = document.getElementById("secret-message");
   if (!btn || !msg) return;
-
   btn.addEventListener("click", () => {
     msg.classList.add("is-open");
     btn.textContent = "Opened ♥";
     btn.disabled = true;
-    setTimeout(() => {
-      msg.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 200);
+    setTimeout(() => msg.scrollIntoView({ behavior: "smooth", block: "center" }), 200);
   });
 })();
 
-/* ---------- Thing-card secret ---------- */
 (function initThingSecret() {
-  const btn = document.querySelector('[data-secret="thing"]');
+  const btn   = document.querySelector('[data-secret="thing"]');
   const modal = document.getElementById("memory-modal");
   const body  = document.getElementById("memory-modal-body");
   if (!btn || !modal || !body) return;
-
   btn.addEventListener("click", () => {
     body.innerHTML = `
       <span class="chapter-number">THE SECRET FIFTH THING</span>
@@ -100,7 +89,6 @@ function escapeHTML(s) {
   });
 })();
 
-/* ---------- Replay ---------- */
 (function initReplay() {
   const btn = document.getElementById("replay-story");
   if (!btn) return;
@@ -113,37 +101,26 @@ function escapeHTML(s) {
   });
 })();
 
-/* ---------- Enter-world scroll ---------- */
 (function initEnterWorld() {
   const btn = document.getElementById("enter-world");
   if (!btn) return;
   btn.addEventListener("click", () => {
-    const target = document.getElementById("story");
-    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    const t = document.getElementById("story");
+    if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 })();
 
-/* ---------- Modal close (shared) ---------- */
 (function initModalClose() {
   const modal = document.getElementById("memory-modal");
   if (!modal) return;
   const close = modal.querySelector(".modal-close");
-  if (close) {
-    close.addEventListener("click", () => {
-      modal.classList.remove("is-open");
-      modal.setAttribute("aria-hidden", "true");
-    });
-  }
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.classList.remove("is-open");
-      modal.setAttribute("aria-hidden", "true");
-    }
-  });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal.classList.contains("is-open")) {
-      modal.classList.remove("is-open");
-      modal.setAttribute("aria-hidden", "true");
-    }
+  const hide = () => {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+  };
+  if (close) close.addEventListener("click", hide);
+  modal.addEventListener("click", e => { if (e.target === modal) hide(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && modal.classList.contains("is-open")) hide();
   });
 })();
