@@ -1,17 +1,26 @@
 /* ==========================================================================
-   FRANK × IVY — Velvet World
-   Theme: deep velvet red, love emojis instead of bubbles, mobile-first,
-   3D parallax on hover-capable pointers only, respects reduced-motion.
+   FRANK × IVY — Velvet Ocean Cube
+   --------------------------------------------------------------------------
+   Concept: the whole site floats inside a glass cube submerged in a velvet
+   red ocean of falling love emojis. The cube tilts with the cursor (desktop)
+   and with tap-drag / device-tilt (phone). Every tilt is driven by CSS vars
+   --rx, --ry, --mx, --my which JS writes on the #experience / main wrappers.
+
+   Mobile-safe:
+     • body scrolls normally (only overflow-x is hidden)
+     • 100dvh everywhere
+     • tilt uses tap/drag + gyroscope when there is no hover
+     • prefers-reduced-motion fully honoured
    ========================================================================== */
 
 :root {
-  /* Velvet palette */
   --velvet-deepest:  #0a0205;
   --velvet-deep:     #1a0208;
   --velvet-mid:      #400d1f;
   --velvet-warm:     #7a1740;
   --velvet-bright:   #a0264b;
   --velvet-glow:     #c5305c;
+
   --rose:            #ff9bb3;
   --rose-soft:       #ffd9e2;
   --gold:            #e8c274;
@@ -22,7 +31,7 @@
   --text-muted:      #c69aa6;
 
   --border-soft:     rgba(255, 155, 179, 0.18);
-  --border-strong:   rgba(255, 155, 179, 0.35);
+  --border-strong:   rgba(255, 155, 179, 0.38);
 
   --shadow-soft:     0 10px 30px rgba(0, 0, 0, 0.5);
   --shadow-glow:     0 0 40px rgba(197, 48, 92, 0.35);
@@ -32,14 +41,12 @@
   --font-sans:       "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-script:     "Great Vibes", cursive;
 
-  --radius-sm:       8px;
-  --radius-md:       14px;
-  --radius-lg:       22px;
-  --radius-pill:     999px;
+  --radius-sm: 8px;  --radius-md: 14px;
+  --radius-lg: 22px; --radius-pill: 999px;
 
-  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px;
-  --space-sm: 12px; --space-md: 16px; --space-lg: 24px;
-  --space-xl: 32px; --space-2xl: 48px; --space-3xl: 72px;
+  --space-2xs: 4px; --space-xs: 8px;  --space-sm: 12px;
+  --space-md: 16px; --space-lg: 24px; --space-xl: 32px;
+  --space-2xl: 48px; --space-3xl: 72px;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -58,7 +65,8 @@ body {
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  position: relative;
+  perspective: 1400px;
+  perspective-origin: 50% 30%;
 }
 img { max-width: 100%; display: block; }
 button { font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -69,6 +77,7 @@ p { margin: 0; }
 /* ==========================================================================
    VELVET BACKGROUND
    ========================================================================== */
+
 #velvet-bg {
   position: fixed;
   inset: 0;
@@ -81,21 +90,21 @@ p { margin: 0; }
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 50% -20%, rgba(197, 48, 92, 0.35) 0%, transparent 55%),
-    radial-gradient(ellipse at 10% 100%, rgba(122, 23, 64, 0.55) 0%, transparent 55%),
-    radial-gradient(ellipse at 90% 80%, rgba(64, 13, 31, 0.7) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% -20%,  rgba(197, 48, 92, 0.40)  0%, transparent 55%),
+    radial-gradient(ellipse at 10% 100%,  rgba(122, 23, 64, 0.60)  0%, transparent 55%),
+    radial-gradient(ellipse at 90% 80%,  rgba(64, 13, 31, 0.75)   0%, transparent 55%),
     linear-gradient(180deg, #0a0205 0%, #1a0208 40%, #2a0614 75%, #0a0205 100%);
 }
 
 .velvet-gradient.magic-tint {
   background:
-    radial-gradient(ellipse at 50% 10%, rgba(255, 155, 179, 0.15) 0%, transparent 55%),
-    radial-gradient(ellipse at 20% 100%, rgba(197, 48, 92, 0.4) 0%, transparent 55%),
-    radial-gradient(ellipse at 85% 90%, rgba(122, 23, 64, 0.55) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 10%,  rgba(255, 155, 179, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 20% 100%, rgba(197, 48, 92, 0.45)  0%, transparent 55%),
+    radial-gradient(ellipse at 85% 90%,  rgba(122, 23, 64, 0.60)  0%, transparent 60%),
     linear-gradient(180deg, #0a0205 0%, #180208 40%, #28050f 75%, #0a0205 100%);
 }
 
-/* Subtle grain */
+/* Grain */
 .velvet-noise {
   position: absolute;
   inset: 0;
@@ -108,12 +117,8 @@ p { margin: 0; }
   background-position: 0 0, 2px 2px;
 }
 
-/* Love petal field — populated by JS */
-#love-petal-field {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-}
+/* Love petals (velvet "bubbles") */
+#love-petal-field { position: absolute; inset: 0; overflow: hidden; }
 
 .love-petal {
   position: absolute;
@@ -121,10 +126,10 @@ p { margin: 0; }
   font-size: 18px;
   line-height: 1;
   opacity: 0;
+  user-select: none;
   will-change: transform, opacity;
   animation: petal-fall linear infinite;
   filter: drop-shadow(0 0 6px rgba(255, 155, 179, 0.4));
-  user-select: none;
 }
 
 @keyframes petal-fall {
@@ -140,8 +145,8 @@ p { margin: 0; }
   inset: 0;
   background:
     radial-gradient(circle 120px at 15% 30%, rgba(255, 155, 179, 0.08), transparent 70%),
-    radial-gradient(circle 180px at 85% 60%, rgba(197, 48, 92, 0.1), transparent 70%),
-    radial-gradient(circle 90px at 55% 90%, rgba(232, 194, 116, 0.06), transparent 70%);
+    radial-gradient(circle 180px at 85% 60%, rgba(197, 48, 92, 0.10), transparent 70%),
+    radial-gradient(circle  90px at 55% 90%, rgba(232, 194, 116, 0.06), transparent 70%);
   filter: blur(20px);
   animation: bokeh-drift 24s ease-in-out infinite alternate;
 }
@@ -151,7 +156,7 @@ p { margin: 0; }
   100% { transform: translate3d(-20px, -14px, 0); }
 }
 
-/* Cursor aura — desktop only */
+/* Cursor aura */
 #cursor-aura {
   position: fixed;
   top: 0; left: 0;
@@ -172,14 +177,51 @@ p { margin: 0; }
 }
 
 /* ==========================================================================
-   LAYOUT WRAPPER — everything above the velvet bg
+   MAIN 3D CUBE WRAPPER
+   --------------------------------------------------------------------------
+   #main-nav, main, footer are all children of .site-cube so they tilt
+   together as one cube. Everything inside stays readable.
    ========================================================================== */
+
+.site-cube {
+  position: relative;
+  z-index: 3;
+  transform-style: preserve-3d;
+  transform:
+    rotateX(calc(var(--ry, 0) * 1deg))
+    rotateY(calc(var(--rx, 0) * 1deg))
+    translate3d(calc(var(--mx, 0) * 1px), calc(var(--my, 0) * 1px), 0);
+  transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  /* touch-action: pan-y so vertical scroll still works; horizontal drag tilts */
+  touch-action: pan-y;
+}
+
+/* Glass cube panel — the "page" sits inside this */
+.site-cube::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    linear-gradient(160deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.01) 40%,
+      rgba(10, 2, 5, 0.4) 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 155, 179, 0.08) inset,
+    0 0 80px rgba(197, 48, 92, 0.12);
+  border-radius: 26px;
+  margin: 14px;
+}
+
 #main-nav,
 main,
 #site-footer,
 .music-control {
   position: relative;
-  z-index: 2;
+  z-index: 4;
 }
 
 main { padding-bottom: var(--space-3xl); }
@@ -187,6 +229,7 @@ main { padding-bottom: var(--space-3xl); }
 /* ==========================================================================
    NAV
    ========================================================================== */
+
 #main-nav {
   display: flex;
   align-items: center;
@@ -240,10 +283,8 @@ main { padding-bottom: var(--space-3xl); }
   color: var(--gold);
   text-shadow: 0 0 10px rgba(232, 194, 116, 0.5);
 }
-
 .nav-links .nav-magic::after { background: var(--gold); }
 
-/* Hide nav links on smallest phones, keep brand + magic */
 @media (max-width: 560px) {
   .nav-links a:not(.nav-magic) { display: none; }
 }
@@ -251,6 +292,7 @@ main { padding-bottom: var(--space-3xl); }
 /* ==========================================================================
    MUSIC
    ========================================================================== */
+
 .music-control {
   position: fixed;
   right: clamp(14px, 3vw, 28px);
@@ -289,8 +331,6 @@ main { padding-bottom: var(--space-3xl); }
   50% { transform: scale(1.25); }
 }
 
-.music-label { display: inline; }
-
 @media (max-width: 480px) {
   .music-label { display: none; }
   .music-control { padding: 10px 12px; }
@@ -299,6 +339,7 @@ main { padding-bottom: var(--space-3xl); }
 /* ==========================================================================
    HERO
    ========================================================================== */
+
 .hero-section {
   min-height: calc(100dvh - 80px);
   display: flex;
@@ -354,13 +395,11 @@ main { padding-bottom: var(--space-3xl); }
   letter-spacing: 0.02em;
 }
 
-/* Moon */
 .hero-moon {
   width: clamp(90px, 16vw, 140px);
   height: clamp(90px, 16vw, 140px);
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%, #fff7e2 0%, #f5dcae 35%, #e8c274 70%, #b89355 100%);
-  position: relative;
   margin: var(--space-lg) auto var(--space-2xl);
   box-shadow:
     0 0 40px rgba(232, 194, 116, 0.5),
@@ -370,8 +409,8 @@ main { padding-bottom: var(--space-3xl); }
 }
 
 @keyframes moon-breathe {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(232, 194, 116, 0.5), 0 0 80px rgba(232, 194, 116, 0.25), inset -8px -12px 30px rgba(120, 80, 20, 0.35); }
-  50% { transform: scale(1.03); box-shadow: 0 0 55px rgba(232, 194, 116, 0.7), 0 0 110px rgba(232, 194, 116, 0.35), inset -8px -12px 30px rgba(120, 80, 20, 0.35); }
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.03); }
 }
 
 .hero-intro {
@@ -414,6 +453,7 @@ main { padding-bottom: var(--space-3xl); }
 /* ==========================================================================
    BUTTONS
    ========================================================================== */
+
 .primary-button {
   display: inline-flex;
   align-items: center;
@@ -437,11 +477,11 @@ main { padding-bottom: var(--space-3xl); }
 
 .primary-button:hover {
   filter: brightness(1.1);
+  transform: translateY(-2px);
   box-shadow:
     0 12px 40px rgba(197, 48, 92, 0.55),
     0 1px 0 rgba(255, 255, 255, 0.25) inset,
     0 0 60px rgba(197, 48, 92, 0.35);
-  transform: translateY(-2px);
 }
 
 .primary-button:active { transform: scale(0.98); }
@@ -454,7 +494,7 @@ main { padding-bottom: var(--space-3xl); }
 
 @keyframes heart-beat {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
+  50%      { transform: scale(1.15); }
 }
 
 .secondary-link {
@@ -484,6 +524,7 @@ main { padding-bottom: var(--space-3xl); }
 /* ==========================================================================
    SECTIONS
    ========================================================================== */
+
 section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 
 .section-intro {
@@ -523,26 +564,18 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
   display: inline-block;
 }
 
-/* Scroll-in reveal */
 .reveal {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 700ms var(--ease), transform 700ms var(--ease);
 }
 
-.reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
-  .hero-moon, .btn-heart, .music-icon, .love-petal, #bokeh-field { animation: none !important; }
-}
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
 
 /* ==========================================================================
    MOON QUOTE
    ========================================================================== */
+
 .moon-quote {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -550,7 +583,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
   max-width: 780px;
   margin: 0 auto var(--space-3xl);
   padding: clamp(24px, 4vw, 40px);
-  background: rgba(26, 2, 8, 0.5);
+  background: rgba(26, 2, 8, 0.55);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
   backdrop-filter: blur(10px);
@@ -591,10 +624,8 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 /* ==========================================================================
    CHAT
    ========================================================================== */
-.chat-story {
-  max-width: 640px;
-  margin: 0 auto;
-}
+
+.chat-story { max-width: 640px; margin: 0 auto; }
 
 .chat-heading { text-align: center; margin-bottom: var(--space-lg); }
 .chat-heading p {
@@ -609,7 +640,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
   flex-direction: column;
   gap: 14px;
   padding: clamp(18px, 3vw, 28px);
-  background: rgba(26, 2, 8, 0.55);
+  background: rgba(26, 2, 8, 0.6);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
   backdrop-filter: blur(12px);
@@ -625,12 +656,10 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
   animation: chat-in 500ms var(--ease) forwards;
 }
 
-.chat-message.sent { align-self: flex-end; align-items: flex-end; }
+.chat-message.sent     { align-self: flex-end;   align-items: flex-end; }
 .chat-message.received { align-self: flex-start; align-items: flex-start; }
 
-@keyframes chat-in {
-  to { opacity: 1; transform: translateY(0); }
-}
+@keyframes chat-in { to { opacity: 1; transform: translateY(0); } }
 
 .chat-name {
   font-size: 0.7rem;
@@ -665,6 +694,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 /* ==========================================================================
    THINGS GRID
    ========================================================================== */
+
 .things-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -675,7 +705,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 
 .thing-card {
   padding: clamp(24px, 3vw, 34px);
-  background: linear-gradient(160deg, rgba(26, 2, 8, 0.6) 0%, rgba(64, 13, 31, 0.4) 100%);
+  background: linear-gradient(160deg, rgba(26, 2, 8, 0.65) 0%, rgba(64, 13, 31, 0.45) 100%);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
   position: relative;
@@ -687,10 +717,10 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 155, 179, 0.14), transparent 55%);
+  pointer-events: none;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 155, 179, 0.16), transparent 55%);
   opacity: 0;
   transition: opacity 300ms ease;
-  pointer-events: none;
 }
 
 .thing-card:hover {
@@ -698,7 +728,6 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
   transform: translateY(-4px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(197, 48, 92, 0.15);
 }
-
 .thing-card:hover::before { opacity: 1; }
 
 .thing-num {
@@ -725,7 +754,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 }
 
 .thing-secret {
-  background: linear-gradient(160deg, rgba(122, 23, 64, 0.5) 0%, rgba(197, 48, 92, 0.3) 100%);
+  background: linear-gradient(160deg, rgba(122, 23, 64, 0.55) 0%, rgba(197, 48, 92, 0.3) 100%);
   border-color: rgba(255, 155, 179, 0.4);
 }
 
@@ -747,6 +776,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 /* ==========================================================================
    GALLERY
    ========================================================================== */
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -756,17 +786,14 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 }
 
 .memory-card {
-  background: linear-gradient(160deg, rgba(26, 2, 8, 0.6) 0%, rgba(64, 13, 31, 0.4) 100%);
+  background: linear-gradient(160deg, rgba(26, 2, 8, 0.65) 0%, rgba(64, 13, 31, 0.45) 100%);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: transform 300ms var(--ease), border-color 300ms ease;
 }
 
-.memory-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--border-strong);
-}
+.memory-card:hover { transform: translateY(-4px); border-color: var(--border-strong); }
 
 .photo-frame {
   aspect-ratio: 4 / 5;
@@ -779,8 +806,8 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 60%, rgba(10, 2, 5, 0.6) 100%);
   pointer-events: none;
+  background: linear-gradient(180deg, transparent 60%, rgba(10, 2, 5, 0.6) 100%);
 }
 
 .gallery-image {
@@ -839,8 +866,8 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 }
 
 @keyframes icon-pulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 155, 179, 0.4); }
-  50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(255, 155, 179, 0); }
+  0%, 100% { transform: scale(1);    box-shadow: 0 0 0 0    rgba(255, 155, 179, 0.4); }
+  50%      { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(255, 155, 179, 0);   }
 }
 
 .memory-future h3 {
@@ -871,10 +898,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
   transition: all 200ms ease;
 }
 
-.memory-button:hover {
-  background: var(--rose);
-  color: var(--velvet-deep);
-}
+.memory-button:hover { background: var(--rose); color: var(--velvet-deep); }
 
 .gallery-footer {
   text-align: center;
@@ -894,6 +918,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 /* ==========================================================================
    SECRET
    ========================================================================== */
+
 .secret-section {
   text-align: center;
   padding-top: clamp(80px, 12vw, 140px);
@@ -921,7 +946,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
   text-align: left;
   margin-top: var(--space-2xl);
   padding: clamp(24px, 4vw, 40px);
-  background: linear-gradient(160deg, rgba(122, 23, 64, 0.5) 0%, rgba(64, 13, 31, 0.4) 100%);
+  background: linear-gradient(160deg, rgba(122, 23, 64, 0.55) 0%, rgba(64, 13, 31, 0.45) 100%);
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-lg);
   animation: secret-in 700ms var(--ease);
@@ -961,8 +986,8 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 /* ==========================================================================
    ENDING
    ========================================================================== */
-.ending-section { text-align: center; }
 
+.ending-section { text-align: center; }
 .ending-content { max-width: 720px; margin: 0 auto; }
 
 .ending-content h2 {
@@ -1025,6 +1050,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 /* ==========================================================================
    FOOTER
    ========================================================================== */
+
 #site-footer {
   text-align: center;
   padding: var(--space-xl) var(--space-md);
@@ -1040,6 +1066,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 /* ==========================================================================
    MODALS
    ========================================================================== */
+
 .modal {
   position: fixed;
   inset: 0;
@@ -1087,7 +1114,6 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 /* ==========================================================================
    MAGIC PAGE
    ========================================================================== */
-.page-magic #velvet-bg { position: fixed; }
 
 .magic-main { position: relative; z-index: 2; }
 
@@ -1136,13 +1162,13 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 
 @keyframes hint-pulse {
   0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
+  50%      { opacity: 1; }
 }
 
 .hint-mobile { display: none; }
 @media (max-width: 640px) {
   .hint-desktop { display: none; }
-  .hint-mobile { display: inline; }
+  .hint-mobile  { display: inline; }
 }
 
 .wish-stage {
@@ -1176,7 +1202,6 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 
 .wish-stage.has-wishes .wish-instructions { opacity: 0; }
 
-/* Wish lantern */
 .wish-lantern {
   position: absolute;
   font-size: 22px;
@@ -1187,33 +1212,22 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 }
 
 @keyframes wish-rise {
-  0% {
-    transform: translate(-50%, -50%) scale(0.4);
-    opacity: 0;
-  }
-  15% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.1);
-  }
-  100% {
-    transform: translate(calc(-50% + var(--wx, 0px)), calc(-50% - 60vh)) scale(0.6) rotate(var(--wr, 0deg));
-    opacity: 0;
-  }
+  0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+  15%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(calc(-50% + var(--wx, 0px)), calc(-50% - 60vh)) scale(0.6) rotate(var(--wr, 0deg)); opacity: 0; }
 }
 
-/* Sparkle burst on tap */
 .wish-spark {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 8px; height: 8px;
   border-radius: 50%;
-  background: radial-gradient(circle, #ffe4ec, #ff9bb3 40%, transparent 70%);
   pointer-events: none;
+  background: radial-gradient(circle, #ffe4ec, #ff9bb3 40%, transparent 70%);
   animation: spark-burst 900ms var(--ease) forwards;
 }
 
 @keyframes spark-burst {
-  0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
   100% { transform: translate(calc(-50% + var(--sx, 0px)), calc(-50% + var(--sy, 0px))) scale(0.2); opacity: 0; }
 }
 
@@ -1247,7 +1261,7 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
   max-width: 620px;
   margin: 0 auto var(--space-2xl);
   padding: clamp(24px, 4vw, 40px);
-  background: rgba(26, 2, 8, 0.5);
+  background: rgba(26, 2, 8, 0.55);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
   backdrop-filter: blur(10px);
@@ -1282,6 +1296,11 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
 /* ==========================================================================
    MOBILE FINE-TUNING
    ========================================================================== */
+
+@media (max-width: 900px) {
+  .site-cube::before { margin: 8px; border-radius: 18px; }
+}
+
 @media (max-width: 600px) {
   body { font-size: 15px; }
   section { padding: 60px 18px; }
@@ -1308,5 +1327,8 @@ section { padding: clamp(60px, 10vw, 120px) clamp(16px, 5vw, 40px); }
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
-  .love-petal, .wish-lantern, .wish-spark { display: none !important; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .love-petal, .wish-lantern, .wish-spark, .hero-moon,
+  .btn-heart, .music-icon, #bokeh-field { animation: none !important; }
+  .site-cube { transform: none !important; }
 }
